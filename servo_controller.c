@@ -1,23 +1,20 @@
 #include "servo_controller.h"
+#include "utils.h"
 
+const int32_t MIN_CNV_X = 432;
+const int32_t MAX_CNV_X = 532;
+const int32_t MID_CNV_X = 482;
+float axis_x_value = 0.5f; //0.f <-> 1.f 
 
-float axis_x_value = 0.f;  //-1.f = 0, 0.f = 90, 1.f = 180;
-float axis_y_value = 0.f;  //-1.f = 0, 0.f = 90, 1.f = 180;
-const int32_t MIN_CNV = 280;
-const int32_t MAX_CNV = 780;
-const int32_t MID_CNV = 500;
-uint32_t cnv;
-int dir = 1;
+const int32_t MIN_CNV_Y = 500;
+const int32_t MAX_CNV_Y = 590;
+const int32_t MID_CNV_Y = 545;
+float axis_y_value = 0.5f; // 0.f <-> 1.f
 
-float clamp(float value, float min, float max)
-{
-	if(value < min) return min;
-	if(value > max) return max;
-	return value;
-}
 
 void InitServo()
 {
+	// Konfiguracja PWM dla serw
 	SIM->SCGC6 |= SIM_SCGC6_TPM0_MASK;		// Enable TPM0 mask in SCGC6 register
 	SIM->SOPT2 |= SIM_SOPT2_TPMSRC(1);  // Choose MCGFLLCLK clock source
 
@@ -34,22 +31,31 @@ void InitServo()
 	TPM0->CONTROLS[2].CnSC |= (TPM_CnSC_MSB_MASK | TPM_CnSC_ELSB_MASK); /* set Output on match, clear Output on reload */ 
 	TPM0->CONTROLS[3].CnSC |= (TPM_CnSC_MSB_MASK | TPM_CnSC_ELSB_MASK); /* set Output on match, clear Output on reload */ 
 	
-	TPM0->CONTROLS[2].CnV = MID_CNV; 				// Set starting value to neutral
-	TPM0->CONTROLS[3].CnV = MID_CNV; 				// Set starting value to neutral
+	//Reset planszy
+	ResetRotation();
 }
-
 
 
 float AddInputX(float value)
 {
 	axis_x_value = clamp(axis_x_value + value, 0.f, 1.f);
-	TPM0->CONTROLS[2].CnV = (axis_x_value * (MAX_CNV - MIN_CNV)) + MIN_CNV;
+	TPM0->CONTROLS[2].CnV = (axis_x_value * (MAX_CNV_X - MIN_CNV_X)) + MIN_CNV_X; //PTB9
 	return axis_x_value;
 }
+
 
 float AddInputY(float value)
 {
 	axis_y_value = clamp(axis_y_value + value, 0.f, 1.f);
-	TPM0->CONTROLS[3].CnV = (axis_y_value * (MAX_CNV - MIN_CNV)) + MIN_CNV;
+	TPM0->CONTROLS[3].CnV = (axis_y_value * (MAX_CNV_Y - MIN_CNV_Y)) + MIN_CNV_Y; //PTB8
 	return axis_y_value;
+}
+
+// Resetuje rotacje planszy
+void ResetRotation()
+{
+	axis_x_value = 0.5f;
+	axis_y_value = 0.5f;
+	TPM0->CONTROLS[2].CnV = MID_CNV_X; 				// Set starting value to neutral
+	TPM0->CONTROLS[3].CnV = MID_CNV_Y; 				// Set starting value to neutral
 }

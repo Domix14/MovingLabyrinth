@@ -408,6 +408,16 @@
               <FileType>1</FileType>
               <FilePath>.\servo_controller.c</FilePath>
             </File>
+            <File>
+              <FileName>sensor_controller.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\sensor_controller.c</FilePath>
+            </File>
+            <File>
+              <FileName>utils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\utils.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -422,6 +432,21 @@
               <FileName>servo_controller.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\servo_controller.h</FilePath>
+            </File>
+            <File>
+              <FileName>sensor_controller.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\sensor_controller.h</FilePath>
+            </File>
+            <File>
+              <FileName>ADC_CONSTANTS.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\ADC_CONSTANTS.h</FilePath>
+            </File>
+            <File>
+              <FileName>utils.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\utils.h</FilePath>
             </File>
           </Files>
         </Group>

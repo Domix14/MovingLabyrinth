@@ -3,8 +3,9 @@
 
 #include "frdm_bsp.h"
 
-void InitServo();
+void InitServo(void);
 float AddInputX(float value);
 float AddInputY(float value);
+void ResetRotation(void);
 
 #endif
